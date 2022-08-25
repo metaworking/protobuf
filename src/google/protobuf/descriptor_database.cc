@@ -1,3 +1,6 @@
+#ifdef _MSC_VER
+#pragma warning(disable: 4456)
+#endif //_MSC_VER
 // Protocol Buffers - Google's data interchange format
 // Copyright 2008 Google Inc.  All rights reserved.
 // https://developers.google.com/protocol-buffers/

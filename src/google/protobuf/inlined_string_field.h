@@ -427,7 +427,14 @@ inline PROTOBUF_NDEBUG_INLINE void InlinedStringField::InternalSwap(
     MessageLite* lhs_msg,  //
     InlinedStringField* rhs, Arena* rhs_arena, bool rhs_arena_dtor_registered,
     MessageLite* rhs_msg) {
-
+#if GOOGLE_PROTOBUF_INTERNAL_DONATE_STEAL_INLINE
+  lhs->get_mutable()->swap(*rhs->get_mutable());
+  if (!lhs_arena_dtor_registered && rhs_arena_dtor_registered) {
+    lhs_msg->OnDemandRegisterArenaDtor(lhs_arena);
+  } else if (lhs_arena_dtor_registered && !rhs_arena_dtor_registered) {
+    rhs_msg->OnDemandRegisterArenaDtor(rhs_arena);
+  }
+#else
   (void)lhs_arena;
   (void)rhs_arena;
   (void)lhs_arena_dtor_registered;
@@ -435,7 +442,7 @@ inline PROTOBUF_NDEBUG_INLINE void InlinedStringField::InternalSwap(
   (void)lhs_msg;
   (void)rhs_msg;
   lhs->get_mutable()->swap(*rhs->get_mutable());
-
+#endif
 }
 
 inline void InlinedStringField::Set(ConstStringParam value, Arena* arena,
